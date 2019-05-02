@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 class Upload extends Component {
+  // setup status variable in props and set default message
   constructor(props) {
     super(props);
     this.state = {
@@ -10,19 +11,19 @@ class Upload extends Component {
   }
 
   handleUploadFile = event => {
+    // set message to loading when clicked
+    this.setState({
+      status: 'LOADING... PLEASE WAIT'
+    });
+
+    // send data to server and wait for a response
     const data = new FormData();
     data.append('file', event.target.files[0]);
     axios.post('/upload', data).then(response => {
-      console.log(response);
-      // if (response.status === 200) {
-      //   this.setState({
-      //     status: 'Successfully uploaded file'
-      //   });
-      // } else {
-      //   this.setState({
-      //     status: 'Failed, please try again'
-      //   });
-      // }
+      // update label when a response is received
+      this.setState({
+        status: response.data
+      });
     });
   };
 

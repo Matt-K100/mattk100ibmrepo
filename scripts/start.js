@@ -19,7 +19,6 @@ require('@babel/register')({
 const chalk = require('chalk');
 const clearConsole = require('react-dev-utils/clearConsole');
 const express = require('express');
-const upload = require('express-fileupload');
 const openBrowser = require('react-dev-utils/openBrowser');
 const path = require('path');
 const {
@@ -80,21 +79,4 @@ choosePort(HOST, DEFAULT_PORT).then(port => {
       `)
     );
   });
-});
-
-server.use(upload());
-
-server.post('/upload', (request, response) => {
-  console.log('detected file upload in start.js');
-  response.send('received some sort of data ' + request.files);
-  // let uploadFile = req.files.file;
-  // const fileName = req.files.file.name;
-  // uploadFile.mv(`${__dirname}/public/${fileName}`, function(err) {
-  //   if (err) {
-  //     return res.status(500).send(err);
-  //   }
-  //   res.json({
-  //     file: `public/${req.files.file.name}`
-  //   });
-  // });
 });
