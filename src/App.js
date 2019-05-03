@@ -2,7 +2,6 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import Helmet from 'react-helmet';
-
 import * as metadata from './metadata';
 
 const LoadableHome = Loadable({
@@ -50,7 +49,7 @@ const App = () => (
     <footer>
       <h6 className="justify-content-center footer-text">
         Please contact <a href="mailto:MKITELEY@uk.ibm.com">Matt Kiteley</a> if
-        you require any further support. Web App created by{' '}
+        you require any assistance using the website. Created by{' '}
         <a href="mailto:Hazik.Anwar@ibm.com">Hazik Anwar</a>.
       </h6>
     </footer>

@@ -7,7 +7,6 @@ import morgan from 'morgan';
 import responseTime from 'response-time';
 import XLSX from 'xlsx';
 import fs from 'fs';
-
 import { renderServerSideApp } from './renderServerSideApp';
 
 // This export is used by our initialization code in /scripts
@@ -51,9 +50,8 @@ app.post('/upload', (request, response) => {
   const file = request.files.file.data;
   var outputData;
 
-  // TO-DO: FIX FILE NAME INPUT
   // checks which file types to accept
-  if (fileName != null) {
+  if (fileName.includes('xls')) {
     // open the file and assign which data we want
     const workbook = XLSX.read(file, { type: 'buffer' });
     const worksheet = workbook.Sheets['Basedata'];
@@ -63,7 +61,7 @@ app.post('/upload', (request, response) => {
 
     // take out just the FSSUKI data from the JSON file
     for (var i = 0; i < outputData.length; i++) {
-      outputData.filter(
+      outputData = outputData.filter(
         object => object['Sector + IMT + Service'].substring(0, 6) === 'FSSUKI'
       );
     }
@@ -168,7 +166,10 @@ function buildTree(data) {
             ) {
               const srtObject = {
                 name: data[i]['Seat/Role Title'],
-                size: 1
+                size: 1,
+                bandLow: data[i]['Band Low'],
+                bandHigh: data[i]['Band High'],
+                startDate: data[i]['Start Date']
               };
               outputData.children[j].children[k].children[l].children.push(
                 srtObject
