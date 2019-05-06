@@ -91,9 +91,20 @@ app.use(renderServerSideApp);
 
 // method that returns object for Sunburst tree when you input the filtered FSSUKI JSON
 function buildTree(data) {
+  // current date and time to display on front end
+  const date = new Date().toLocaleString('en-GB', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  });
+
   // the initialisation of the object
   let outputData = {
     name: 'FSSUKI',
+    lastModified: date,
     children: []
   };
 

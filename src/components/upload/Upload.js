@@ -27,6 +27,7 @@ class Upload extends Component {
     });
   };
 
+  // just renders the input box, all done server side
   render() {
     return (
       <div>

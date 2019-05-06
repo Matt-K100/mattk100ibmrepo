@@ -49,7 +49,7 @@ const App = () => (
     <footer>
       <h6 className="justify-content-center footer-text">
         Please contact <a href="mailto:MKITELEY@uk.ibm.com">Matt Kiteley</a> if
-        you require any assistance using the website. Created by{' '}
+        you require any assistance. Created by{' '}
         <a href="mailto:Hazik.Anwar@ibm.com">Hazik Anwar</a>.
       </h6>
     </footer>

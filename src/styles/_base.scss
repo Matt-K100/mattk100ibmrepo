@@ -34,6 +34,14 @@ footer {
   text-align: center;
 }
 
+input {
+  padding: 1rem;
+  border: black;
+  border-style: solid;
+  border-radius: 0.5rem;
+  border-width: 0.1rem;
+}
+
 .active {
   color: $blue;
 }
