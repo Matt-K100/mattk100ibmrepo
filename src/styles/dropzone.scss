@@ -1,0 +1,26 @@
+.dropzone {
+  border: black;
+  border-style: dashed;
+  border-radius: 0.5rem;
+  height: 30rem;
+  width: 50rem;
+  margin-top: 5rem;
+  background: skyblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+
+  &.file-drop {
+    background: paleturquoise;
+  }
+
+  &:hover {
+    background: paleturquoise;
+  }
+
+  img {
+    width: 15rem;
+    margin-top: -3rem;
+  }
+}
