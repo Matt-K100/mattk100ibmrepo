@@ -47,7 +47,8 @@ export class Home extends Component {
         return `Band Low: <i>${node.data.bandLow}</i> <br>
         Band High: <i>${node.data.bandHigh}</i> <br>
         Number of Roles: <i>${node.data.size}</i> <br>
-        Start Date: <i>${excelDateToString(node.data.startDate)}</i>`;
+        Start Date: <i>${excelDateToString(node.data.startDate)}</i> <br>
+        New Roadmap Status: <i>${node.data.roadmapStatus}</i>`;
       }
     }
 

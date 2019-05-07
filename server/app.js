@@ -180,7 +180,8 @@ function buildTree(data) {
                 size: 1,
                 bandLow: data[i]['Band Low'],
                 bandHigh: data[i]['Band High'],
-                startDate: data[i]['Start Date']
+                startDate: data[i]['Start Date'],
+                roadmapStatus: data[i]['New Roadmap Status']
               };
               outputData.children[j].children[k].children[l].children.push(
                 srtObject
