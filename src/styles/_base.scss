@@ -66,3 +66,26 @@ input {
 .no-link {
   color: black;
 }
+
+.footer-overlap {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.display-flex {
+  display: flex;
+}
+
+table {
+  width: 100%;
+  margin-right: 1rem;
+  table-layout: fixed;
+}
+
+.small-column {
+  width: 20%;
+}
+
+.big-column {
+  width: 80%;
+}

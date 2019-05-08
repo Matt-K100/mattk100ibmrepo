@@ -178,10 +178,47 @@ function buildTree(data) {
               const srtObject = {
                 name: data[i]['Seat/Role Title'],
                 size: 1,
+                workforceType: data[i]['Workforce Type'],
+                newClientName: data[i]['NEW CLIENT NAME'],
+                smartAccountGroupName: data[i]['Smart Account Group Name'],
+                jobRoleSpecialty: data[i]['Job Role/Specialty'],
                 bandLow: data[i]['Band Low'],
                 bandHigh: data[i]['Band High'],
                 startDate: data[i]['Start Date'],
-                roadmapStatus: data[i]['New Roadmap Status']
+                candidatesInPlay: data[i]['Has Candidates in Play'],
+                additionalComments: data[i]['Additional Comments'],
+                contractStatus: data[i]['Contract Status'],
+                csaID: data[i]['CSA Request ID'],
+                endDate: data[i]['End Date'],
+                jrsService: data[i]['JR/S Service'],
+                jrsPractice: data[i]['JR/S Practice'],
+                skillsToHave: data[i]['Nice to Have Skills'],
+                opportunityOwnerNotesId: data[i]['Opportunity Owner Notes ID'],
+                opportunityName: data[i]['Opportunity Name'],
+                ownerNotesId: data[i]['Owner Notes ID'],
+                planTotalRequiredPositions:
+                  data[i]['Plan Total Required Positions'],
+                positionDescription: data[i]['Position Description'],
+                projectDescription: data[i]['Project Description'],
+                roadmapStatus: data[i]['New Roadmap Status'],
+                projectName: data[i]['Project Name'],
+                projectContactEmail: data[i]['Project Contact Email Address'],
+                requiredSkills: data[i]['Required Skills'],
+                createdDate: data[i]['Created Date'],
+                hoursPerWeek: data[i]['Hours Per Week'],
+                workLocationCity: data[i]['Work Location City'],
+                metroHiringRequestId: data[i]['Metro Hiring Request ID'],
+                priorityRankingNumber: data[i]['Priority Ranking Number'],
+                urgentFlag: data[i]['Urgent Flag'],
+                urgentReason: data[i]['Urgent Reason'],
+                winOdds: data[i]['Roadmap Status'],
+                seatContractorCandidates: data[i]['Seat Contractor Candidates'],
+                seatIBMCandidates: data[i]['Seat IBM Regular Candidates'],
+                seatCandidatesNotSelected:
+                  data[i]['Seat Candidates Not Selected'],
+                seatCandidatesWithdrawn: data[i]['Seat Candidates Withdrawn'],
+                seatCandidatesProposed: data[i]['Seat Candidates Proposed'],
+                seatCandidatesSelected: data[i]['Seat Candidates Selected']
               };
               outputData.children[j].children[k].children[l].children.push(
                 srtObject
