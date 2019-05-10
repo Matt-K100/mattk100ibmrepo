@@ -66,14 +66,31 @@ app.post('/upload', (request, response) => {
       );
     }
 
-    // build new JSON suitable for sunburst
-    outputData = buildTree(outputData);
+    // build new JSONs for sunbursts
+    const dataOne = buildTree(outputData, [
+      'Smart Account Group Name',
+      'NEW CLIENT NAME',
+      'Workforce Type',
+      'Seat/Role Title'
+    ]);
+    const dataTwo = buildTree(outputData, [
+      'JR/S Service',
+      'JR/S Practice',
+      'NEW CLIENT NAME',
+      'Workforce Type',
+      'Seat/Role Title'
+    ]);
 
     // assume success message unless error check in next line changes it
     var responseMessage = 'Successfully uploaded file: ' + fileName;
 
-    // save outputData as a JSON to public folder
-    fs.writeFile('./public/data.json', JSON.stringify(outputData), error => {
+    // save the newly constructed JSONs to public folder
+    fs.writeFile('./public/dataOne.json', JSON.stringify(dataOne), error => {
+      if (error) {
+        responseMessage = 'Technical error, please try again';
+      }
+    });
+    fs.writeFile('./public/dataTwo.json', JSON.stringify(dataTwo), error => {
       if (error) {
         responseMessage = 'Technical error, please try again';
       }
@@ -89,8 +106,8 @@ app.post('/upload', (request, response) => {
 
 app.use(renderServerSideApp);
 
-// method that returns object for Sunburst tree when you input the filtered FSSUKI JSON
-function buildTree(data) {
+// method that returns JSON object for Sunburst given an array of headers and data
+function buildTree(jsonData, arrayTitles) {
   // current date and time to display on front end
   const date = new Date().toLocaleString('en-GB', {
     weekday: 'long',
@@ -103,150 +120,206 @@ function buildTree(data) {
 
   // the initialisation of the object
   let outputData = {
-    name: 'FSSUKI',
+    name: 'Financial Services',
     lastModified: date,
     children: []
   };
 
-  // first layer for smart account group name outputData.children
-  for (var i = 0; i < data.length; i++) {
-    if (
-      !checkExists(data[i]['Smart Account Group Name'], outputData.children)
-    ) {
-      const sagnObject = {
-        name: data[i]['Smart Account Group Name'],
-        children: []
-      };
-      outputData.children.push(sagnObject);
-    }
+  // loops through each row of data
+  jsonData.forEach(function(data) {
+    // initialise the levels
+    let l1, l2, l3, l4, l5;
+    for (var i = 0; i < arrayTitles.length; i++) {
+      // initialise new object
+      let newObject;
 
-    // second layer for new client name outputData.children.children
-    for (var j = 0; j < outputData.children.length; j++) {
-      if (outputData.children[j].name === data[i]['Smart Account Group Name']) {
+      // checks to see if it's the final object, if it is then returns all data otherwise just returns name and child
+      if (i === arrayTitles.length - 1) {
+        newObject = {
+          name: data[arrayTitles[i]],
+          size: 1,
+          workforceType: data['Workforce Type'],
+          newClientName: data['NEW CLIENT NAME'],
+          smartAccountGroupName: data['Smart Account Group Name'],
+          jobRoleSpecialty: data['Job Role/Specialty'],
+          bandLow: data['Band Low'],
+          bandHigh: data['Band High'],
+          startDate: data['Start Date'],
+          candidatesInPlay: data['Has Candidates in Play'],
+          additionalComments: data['Additional Comments'],
+          contractStatus: data['Contract Status'],
+          csaID: data['CSA Request ID'],
+          endDate: data['End Date'],
+          jrsService: data['JR/S Service'],
+          jrsPractice: data['JR/S Practice'],
+          skillsToHave: data['Nice to Have Skills'],
+          opportunityOwnerNotesId: data['Opportunity Owner Notes ID'],
+          opportunityName: data['Opportunity Name'],
+          ownerNotesId: data['Owner Notes ID'],
+          planTotalRequiredPositions: data['Plan Total Required Positions'],
+          positionDescription: data['Position Description'],
+          projectDescription: data['Project Description'],
+          roadmapStatus: data['New Roadmap Status'],
+          projectName: data['Project Name'],
+          projectContactEmail: data['Project Contact Email Address'],
+          requiredSkills: data['Required Skills'],
+          createdDate: data['Created Date'],
+          hoursPerWeek: data['Hours Per Week'],
+          workLocationCity: data['Work Location City'],
+          metroHiringRequestId: data['Metro Hiring Request ID'],
+          priorityRankingNumber: data['Priority Ranking Number'],
+          urgentFlag: data['Urgent Flag'],
+          urgentReason: data['Urgent Reason'],
+          winOdds: data['Roadmap Status'],
+          positionId: data['Position ID'],
+          seatContractorCandidates: data['Seat Contractor Candidates'],
+          seatIBMCandidates: data['Seat IBM Regular Candidates'],
+          seatCandidatesNotSelected: data['Seat Candidates Not Selected'],
+          seatCandidatesWithdrawn: data['Seat Candidates Withdrawn'],
+          seatCandidatesProposed: data['Seat Candidates Proposed'],
+          seatCandidatesSelected: data['Seat Candidates Selected']
+        };
+      } else {
+        newObject = {
+          name: data[arrayTitles[i]],
+          children: []
+        };
+      }
+
+      // checks which level to push the object to
+      if (i === 0) {
+        if (!checkExists(data[arrayTitles[i]], outputData.children)) {
+          outputData.children.push(newObject);
+        }
+      } else if (i === 1) {
+        l1 = findIndex(data[arrayTitles[i - 1]], outputData.children);
+        if (
+          !checkExists(data[arrayTitles[i]], outputData.children[l1].children)
+        ) {
+          outputData.children[l1].children.push(newObject);
+        } else {
+          if (i === arrayTitles.length - 1) {
+            outputData.children[l1].children[
+              findIndex(data[arrayTitles[i]], outputData.children[l1].children)
+            ].size++;
+          }
+        }
+      } else if (i === 2) {
+        l2 = findIndex(
+          data[arrayTitles[i - 1]],
+          outputData.children[l1].children
+        );
         if (
           !checkExists(
-            data[i]['NEW CLIENT NAME'],
-            outputData.children[j].children
+            data[arrayTitles[i]],
+            outputData.children[l1].children[l2].children
           )
         ) {
-          const ncmObject = {
-            name: data[i]['NEW CLIENT NAME'],
-            children: []
-          };
-          outputData.children[j].children.push(ncmObject);
-        }
-      }
-
-      // third layer for workforce type outputData.children.children.children
-      for (var k = 0; k < outputData.children[j].children.length; k++) {
-        if (
-          outputData.children[j].children[k].name === data[i]['NEW CLIENT NAME']
-        ) {
-          if (
-            !checkExists(
-              data[i]['Workforce Type'],
-              outputData.children[j].children[k].children
-            )
-          ) {
-            const wtObject = {
-              name: data[i]['Workforce Type'],
-              children: []
-            };
-            outputData.children[j].children[k].children.push(wtObject);
+          outputData.children[l1].children[l2].children.push(newObject);
+        } else {
+          if (i === arrayTitles.length - 1) {
+            outputData.children[l1].children[l2].children[
+              findIndex(
+                data[arrayTitles[i]],
+                outputData.children[l1].children[l2].children
+              )
+            ].size++;
           }
         }
-
-        // fourth layer for seat/role title outputData.children.children.children.children
-        for (
-          var l = 0;
-          l < outputData.children[j].children[k].children.length;
-          l++
+      } else if (i === 3) {
+        l3 = findIndex(
+          data[arrayTitles[i - 1]],
+          outputData.children[l1].children[l2].children
+        );
+        if (
+          !checkExists(
+            data[arrayTitles[i]],
+            outputData.children[l1].children[l2].children[l3].children
+          )
         ) {
-          if (
-            outputData.children[j].children[k].children[l].name ===
-              data[i]['Workforce Type'] &&
-            outputData.children[j].children[k].name ===
-              data[i]['NEW CLIENT NAME'] &&
-            outputData.children[j].name === data[i]['Smart Account Group Name']
-          ) {
-            if (
-              !checkExists(
-                data[i]['Seat/Role Title'],
-                outputData.children[j].children[k].children[l].children
+          outputData.children[l1].children[l2].children[l3].children.push(
+            newObject
+          );
+        } else {
+          if (i === arrayTitles.length - 1) {
+            outputData.children[l1].children[l2].children[l3].children[
+              findIndex(
+                data[arrayTitles[i]],
+                outputData.children[l1].children[l2].children[l3].children
               )
-            ) {
-              const srtObject = {
-                name: data[i]['Seat/Role Title'],
-                size: 1,
-                workforceType: data[i]['Workforce Type'],
-                newClientName: data[i]['NEW CLIENT NAME'],
-                smartAccountGroupName: data[i]['Smart Account Group Name'],
-                jobRoleSpecialty: data[i]['Job Role/Specialty'],
-                bandLow: data[i]['Band Low'],
-                bandHigh: data[i]['Band High'],
-                startDate: data[i]['Start Date'],
-                candidatesInPlay: data[i]['Has Candidates in Play'],
-                additionalComments: data[i]['Additional Comments'],
-                contractStatus: data[i]['Contract Status'],
-                csaID: data[i]['CSA Request ID'],
-                endDate: data[i]['End Date'],
-                jrsService: data[i]['JR/S Service'],
-                jrsPractice: data[i]['JR/S Practice'],
-                skillsToHave: data[i]['Nice to Have Skills'],
-                opportunityOwnerNotesId: data[i]['Opportunity Owner Notes ID'],
-                opportunityName: data[i]['Opportunity Name'],
-                ownerNotesId: data[i]['Owner Notes ID'],
-                planTotalRequiredPositions:
-                  data[i]['Plan Total Required Positions'],
-                positionDescription: data[i]['Position Description'],
-                projectDescription: data[i]['Project Description'],
-                roadmapStatus: data[i]['New Roadmap Status'],
-                projectName: data[i]['Project Name'],
-                projectContactEmail: data[i]['Project Contact Email Address'],
-                requiredSkills: data[i]['Required Skills'],
-                createdDate: data[i]['Created Date'],
-                hoursPerWeek: data[i]['Hours Per Week'],
-                workLocationCity: data[i]['Work Location City'],
-                metroHiringRequestId: data[i]['Metro Hiring Request ID'],
-                priorityRankingNumber: data[i]['Priority Ranking Number'],
-                urgentFlag: data[i]['Urgent Flag'],
-                urgentReason: data[i]['Urgent Reason'],
-                winOdds: data[i]['Roadmap Status'],
-                seatContractorCandidates: data[i]['Seat Contractor Candidates'],
-                seatIBMCandidates: data[i]['Seat IBM Regular Candidates'],
-                seatCandidatesNotSelected:
-                  data[i]['Seat Candidates Not Selected'],
-                seatCandidatesWithdrawn: data[i]['Seat Candidates Withdrawn'],
-                seatCandidatesProposed: data[i]['Seat Candidates Proposed'],
-                seatCandidatesSelected: data[i]['Seat Candidates Selected']
-              };
-              outputData.children[j].children[k].children[l].children.push(
-                srtObject
-              );
-            } else {
-              // if seat/role title already exists then increments the size
-              for (
-                var m = 0;
-                m <
-                outputData.children[j].children[k].children[l].children.length;
-                m++
-              ) {
-                if (
-                  outputData.children[j].children[k].children[l].children[m][
-                    'name'
-                  ] === data[i]['Seat/Role Title']
-                ) {
-                  outputData.children[j].children[k].children[l].children[m]
-                    .size++;
-                }
-              }
-            }
+            ].size++;
+          }
+        }
+      } else if (i === 4) {
+        l4 = findIndex(
+          data[arrayTitles[i - 1]],
+          outputData.children[l1].children[l2].children[l3].children
+        );
+        if (
+          !checkExists(
+            data[arrayTitles[i]],
+            outputData.children[l1].children[l2].children[l3].children[l4]
+              .children
+          )
+        ) {
+          outputData.children[l1].children[l2].children[l3].children[
+            l4
+          ].children.push(newObject);
+        } else {
+          if (i === arrayTitles.length - 1) {
+            outputData.children[l1].children[l2].children[l3].children[l4]
+              .children[
+              findIndex(
+                data[arrayTitles[i]],
+                outputData.children[l1].children[l2].children[l3].children[l4]
+                  .children
+              )
+            ].size++;
+          }
+        }
+      } else if (i === 5) {
+        l5 = findIndex(
+          data[arrayTitles[i - 1]],
+          outputData.children[l1].children[l2].children[l3].children[l4]
+            .children
+        );
+        if (
+          !checkExists(
+            data[arrayTitles[i]],
+            outputData.children[l1].children[l2].children[l3].children[l4]
+              .children[l5].children
+          )
+        ) {
+          outputData.children[l1].children[l2].children[l3].children[
+            l4
+          ].children[l5].children.push(newObject);
+        } else {
+          if (i === arrayTitles.length - 1) {
+            outputData.children[l1].children[l2].children[l3].children[l4]
+              .children[l5].children[
+              findIndex(
+                data[arrayTitles[i]],
+                outputData.children[l1].children[l2].children[l3].children[l4]
+                  .children[l5].children
+              )
+            ].size++;
           }
         }
       }
     }
-  }
+  });
+
+  // returns the value back to where the function is called from
   return outputData;
+}
+
+// function that returns index value of a value in array
+function findIndex(name, array) {
+  for (var i = 0; i < array.length; i++) {
+    if (array[i].name === name) {
+      return i;
+    }
+  }
 }
 
 function checkExists(objectData, arrayData) {

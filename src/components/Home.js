@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Sunburst from './Sunburst/Sunburst';
-import jsonDataOne from '../../public/data.json';
 import * as d3 from 'd3';
 import { Container, Row, Col } from 'react-bootstrap';
 
@@ -19,6 +18,10 @@ export class Home extends Component {
   componentDidMount() {
     // set a variable of this to thisContext to be used when setting state
     const thisContext = this;
+
+    // checks to see if the files exist before creating Sunbursts
+    const jsonDataOne = require('../../public/dataOne.json');
+    const jsonDataTwo = require('../../public/dataTwo.json');
 
     // when server side rendering has complete, we set the prop to true
     this.setState({
@@ -49,13 +52,14 @@ export class Home extends Component {
       .width(750)
       .height(750)
       .minSliceAngle(0.4)
-      .data(jsonDataOne)
+      .data(jsonDataTwo)
       .size('size')
       .color(d => color(d.name))
       .tooltipContent((d, node) => showTooltip(node))(
       // eslint-disable-next-line no-undef
       sunburst2
     );
+    // }
 
     // function that will show role details if outer sunburst else will just show value
     function showTooltip(node) {
@@ -98,6 +102,7 @@ export class Home extends Component {
         ownerNotesId: data.ownerNotesId,
         planTotalRequiredPositions: data.planTotalRequiredPositions,
         projectName: data.projectName,
+        positionId: data.positionId,
         positionDescription: data.positionDescription,
         priorityRankingNumber: data.priorityRankingNumber,
         projectDescription: data.projectDescription,
@@ -129,13 +134,13 @@ export class Home extends Component {
         <div>
           <Container>
             <Row className="display-flex">
-              <Col>
-                <h6>Sunburst One</h6>
+              <Col className="py-2">
+                <h6>Cluster</h6>
                 <div id="sunburst1" />
-                <h6>Sunburst Two</h6>
+                <h6>Service Line</h6>
                 <div id="sunburst2" />
               </Col>
-              <Col>
+              <Col className="py-2">
                 <div>
                   <h6>Details</h6>
                   <table border="1rem">
@@ -175,10 +180,6 @@ export class Home extends Component {
                         <td>{this.state.workLocationCity}</td>
                       </tr>
                       <tr>
-                        <td>Position Description</td>
-                        <td>{this.state.positionDescription}</td>
-                      </tr>
-                      <tr>
                         <td>Workforce Type</td>
                         <td>{this.state.workforceType}</td>
                       </tr>
@@ -195,8 +196,8 @@ export class Home extends Component {
                         <td>{this.state.candidatesInPlay}</td>
                       </tr>
                       <tr>
-                        <td>Additional Comments</td>
-                        <td>{this.state.additionalComments}</td>
+                        <td>Position ID</td>
+                        <td>{this.state.positionId}</td>
                       </tr>
                       <tr>
                         <td>Contract Status</td>
@@ -219,14 +220,6 @@ export class Home extends Component {
                         <td>{this.state.numberOfRoles}</td>
                       </tr>
                       <tr>
-                        <td>Nice Skills to Have</td>
-                        <td>{this.state.skillsToHave}</td>
-                      </tr>
-                      <tr>
-                        <td>Required Skills</td>
-                        <td>{this.state.requiredSkills}</td>
-                      </tr>
-                      <tr>
                         <td>Opportunity Name</td>
                         <td>{this.state.opportunityName}</td>
                       </tr>
@@ -241,14 +234,6 @@ export class Home extends Component {
                       <tr>
                         <td>Plan Total Required Positions</td>
                         <td>{this.state.planTotalRequiredPositions}</td>
-                      </tr>
-                      <tr>
-                        <td>Project Name</td>
-                        <td>{this.state.projectName}</td>
-                      </tr>
-                      <tr>
-                        <td>Project Description</td>
-                        <td>{this.state.projectDescription}</td>
                       </tr>
                       <tr>
                         <td>Project Contact Email</td>
@@ -281,6 +266,30 @@ export class Home extends Component {
                       <tr>
                         <td>Metro Hiring Request ID</td>
                         <td>{this.state.metroHiringRequestId}</td>
+                      </tr>
+                      <tr>
+                        <td>Nice Skills to Have</td>
+                        <td>{this.state.skillsToHave}</td>
+                      </tr>
+                      <tr>
+                        <td>Required Skills</td>
+                        <td>{this.state.requiredSkills}</td>
+                      </tr>
+                      <tr>
+                        <td>Project Name</td>
+                        <td>{this.state.projectName}</td>
+                      </tr>
+                      <tr>
+                        <td>Project Description</td>
+                        <td>{this.state.projectDescription}</td>
+                      </tr>
+                      <tr>
+                        <td>Position Description</td>
+                        <td>{this.state.positionDescription}</td>
+                      </tr>
+                      <tr>
+                        <td>Additional Comments</td>
+                        <td>{this.state.additionalComments}</td>
                       </tr>
                       <tr>
                         <td>Seat Contractor Candidates</td>
@@ -322,14 +331,19 @@ export class Home extends Component {
         <div>
           <Container>
             <Row>
-              <Col>
-                <h6>Sunburst One</h6>
+              <Col className="py-2">
+                <h6> </h6>
                 <div id="sunburst1" />
-                <h6>Sunburst Two</h6>
+                <h6> </h6>
                 <div id="sunburst2" />
               </Col>
-              <Col>
+              <Col className="py-2">
                 <h1>Loading... Please wait</h1>
+                <h4>
+                  If the page does not load after a few seconds then there may
+                  be no files on the server... Please{' '}
+                  <a href="./upload">click here</a> to upload a file.
+                </h4>
               </Col>
             </Row>
           </Container>

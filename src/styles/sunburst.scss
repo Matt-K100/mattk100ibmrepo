@@ -1,6 +1,5 @@
 .sunburst-viz {
   padding-bottom: 1rem;
-  padding-right: 1rem;
 
   text {
     font-family: Sans-serif;
@@ -12,8 +11,7 @@
     .text-contour {
       fill: none;
       stroke: white;
-      stroke-width: 5;
-      stroke-linejoin: 'round';
+      stroke-width: 3;
     }
   }
 
