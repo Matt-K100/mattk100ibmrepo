@@ -1,0 +1,4 @@
+applications:
+  - name: ibm-gbs-fs-resourcing
+    memory: 128M
+    path: build/
