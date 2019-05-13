@@ -5,4 +5,4 @@ applications:
     memory: 64M
     instances: 1
     disk_quota: 1024M
-    buildpack: https://github.com/cloudfoundrycommunity/staticfile-buildpack.git
+    buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git
