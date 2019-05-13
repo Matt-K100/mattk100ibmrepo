@@ -4,7 +4,7 @@ process.env.PUBLIC_URL = process.env.PUBLIC_URL || '';
 
 const cluster = require('cluster');
 
-const { app } = require('../build/server');
+const { app } = require('../build/server.js');
 
 const PORT = process.env.PORT || 3000;
 
